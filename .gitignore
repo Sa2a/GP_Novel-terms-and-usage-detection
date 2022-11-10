@@ -2,3 +2,7 @@
 *.xlsx
 *.txt
 *.csv
+*.json
+*.bin
+*.gz
+Preprocessing_Detct_Novel_terms/arabert/
