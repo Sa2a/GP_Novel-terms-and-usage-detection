@@ -8,8 +8,7 @@ Created on Mon Oct 17 20:21:46 2022
 from transformers import RobertaTokenizer
 
 # initialize the tokenizer using the tokenizer we initialized and saved to file
-tokenizer = RobertaTokenizer.from_pretrained('filiberto', max_len=512)#################
-
+tokenizer = RobertaTokenizer.from_pretrained("../EgyBERTa", max_len=512,local_files_only=True)
 
 
 with open('../../data/text/oscar_it/text_0.txt', 'r', encoding='utf-8') as fp:
@@ -31,6 +30,7 @@ input_ids = labels.detach().clone()
 # create random array of floats with equal dims to input_ids
 rand = torch.rand(input_ids.shape)
 # mask random 15% where token is not 0 [PAD], 1 [CLS], or 2 [SEP]
+
 mask_arr = (rand < .15) * (input_ids != 0) * (input_ids != 1) * (input_ids != 2)
 # loop through each row in input_ids tensor (cannot do in parallel)
 for i in range(input_ids.shape[0]):
