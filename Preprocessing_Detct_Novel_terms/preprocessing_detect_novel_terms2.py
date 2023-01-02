@@ -13,21 +13,21 @@ Original file is located at
 
 import re
 import pandas as pd
-from collections import Counter
-import nltk
-from nltk.corpus import wordnet
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
+# from collections import Counter
+# import nltk
+# from nltk.corpus import wordnet
+# from nltk.corpus import stopwords
+# from nltk.stem import WordNetLemmatizer
+# from nltk.stem.porter import PorterStemmer
 import numpy as np
-from nltk.corpus import stopwords
-import os
-import warnings
+# from nltk.corpus import stopwords
+# import os
+# import warnings
 import itertools
 # import emoji
 from nltk.corpus import stopwords
 import string
-from ar_corrector.corrector import Corrector
+# from ar_corrector.corrector import Corrector
 
 data = pd.read_excel("/content/train_data .xlsx")
 
@@ -98,7 +98,7 @@ def removeURl(txt):
   return without_url
 
 def removestopwords(txt):
-  without_stopwords = ' '.join(word for word in txt.split() if word not in stop_words)
+  without_stopwords = ' '.join(word for word in txt.split() if word not in stopwords)
   return without_stopwords
 
 def removepuncatution(txt):
@@ -153,10 +153,10 @@ def remove_Emojis(text):
   without_emojy=re.sub(emoj, '', text)
   return without_emojy
 
-corr = Corrector()
-def correction(text):
-  text=corr.contextual_correct(text)
-  return text
+# corr = Corrector()
+# def correction(text):
+#   text=corr.contextual_correct(text)
+#   return text
 
 def Clean_Egyptain_text(raw_text):
 
@@ -198,55 +198,55 @@ def Clean_Egyptain_text(raw_text):
 
 
  #10 remove non rabic words from the text
-  text=correction(text)
+  # text=correction(text)
 
   return text
 
-clean = {
-    'Text': data['tweet'].apply(lambda x: Clean_Egyptain_text(str(x)))
-    }
-Cleaned_data = pd.DataFrame.from_dict(clean)
+# clean = {
+#     'Text': data['tweet'].apply(lambda x: Clean_Egyptain_text(str(x)))
+#     }
+# Cleaned_data = pd.DataFrame.from_dict(clean)
 
-filter = Cleaned_data['Text'] != ""
-Cleaned_data = Cleaned_data[filter]
+# filter = Cleaned_data['Text'] != ""
+# Cleaned_data = Cleaned_data[filter]
 
-Cleaned_data
+# Cleaned_data
 
-"""#### Check missing data"""
+# """#### Check missing data"""
 
-Cleaned_data.isnull().sum()
+# Cleaned_data.isnull().sum()
 
-"""#### Cleaned data CSV"""
+# """#### Cleaned data CSV"""
 
-Cleaned_data.to_csv('clean_dataset2.csv',encoding="utf8")
+# Cleaned_data.to_csv('clean_dataset2.csv',encoding="utf8")
 
-"""####Get the Vocab from thr trained data"""
+# """####Get the Vocab from thr trained data"""
 
-x = Cleaned_data.to_string(header=False,
-                  index=False,
-                  index_names=False).split('\n')
-words = [','.join(ele.split()) for ele in x]
-print(words)
+# x = Cleaned_data.to_string(header=False,
+#                   index=False,
+#                   index_names=False).split('\n')
+# words = [','.join(ele.split()) for ele in x]
+# print(words)
 
-All_words = [word for item in x for word in item.split()]
-All_words
+# All_words = [word for item in x for word in item.split()]
+# All_words
 
-type(All_words)
+# type(All_words)
 
-# file.write("\n".join(names)
+# # file.write("\n".join(names)
 
-with open("AOC.txt", "w") as output:
-    output.write(str(All_words))
+# with open("AOC.txt", "w") as output:
+#     output.write(str(All_words))
 
-def split_sentence(text):
-  text = text.strip()
-  tokens = text.split()
-  for i, token in enumerate(tokens):
-          if token.startswith('و'):
-                  tokens[i] = token[0] + ' ' + token[1:]
-          if token.startswith('ولا'):
-                  tokens[i] = token[0] + ' ' +token[1:3] +' '+ token[3:]
+# def split_sentence(text):
+#   text = text.strip()
+#   tokens = text.split()
+#   for i, token in enumerate(tokens):
+#           if token.startswith('و'):
+#                   tokens[i] = token[0] + ' ' + token[1:]
+#           if token.startswith('ولا'):
+#                   tokens[i] = token[0] + ' ' +token[1:3] +' '+ token[3:]
 
-  text = ' '.join(tokens)
-  return text
+#   text = ' '.join(tokens)
+#   return text
 
