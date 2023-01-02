@@ -9,7 +9,7 @@ Original file is located at
 #**Reading the data**
 """
 
-!pip install ar-corrector
+# !pip install ar-corrector
 
 import re
 import pandas as pd
@@ -52,13 +52,13 @@ data['Source'].unique()
 *   Remove Elongation
 """
 
-!pip install farasapy
+# !pip install farasapy
 
-!git clone https://github.com/aub-mind/arabert
+# !git clone https://github.com/aub-mind/arabert
 
-!pip install pyarabic
+# !pip install pyarabic
 
-!pip install pyspellchecker
+# !pip install pyspellchecker
 
 def removeshortsen(txt):
   words=txt.split(' ')
