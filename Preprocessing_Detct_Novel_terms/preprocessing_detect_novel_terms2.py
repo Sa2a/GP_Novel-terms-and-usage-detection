@@ -29,16 +29,16 @@ from nltk.corpus import stopwords
 import string
 # from ar_corrector.corrector import Corrector
 
-data = pd.read_excel("/content/train_data .xlsx")
+# data = pd.read_excel("/content/train_data .xlsx")
 
-teeext=data.iloc[11,0]
-teeext
+# teeext=data.iloc[11,0]
+# teeext
 
-data
+# data
 
-data['tweet'].describe()
+# data['tweet'].describe()
 
-data['Source'].unique()
+# data['Source'].unique()
 
 """#**Preproccessing**
 
