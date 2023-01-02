@@ -158,6 +158,6 @@ def getRelevanceScore(true_sentence_list, word, word_index):
     actual_relevant_precent = actual_not_relevant_dist  / total_distance
     actual_notrelevant_precent = actual_relevant_dist / total_distance
 
-    pred = 0 if actual_relevant_precent >= .2 else 1
+    # pred = 0 if actual_relevant_precent >= .2 else 1
     # report.append((pred, actual_relevant_precent, predicted, irrelevant_word))
-    return (pred, actual_relevant_precent, predicted, irrelevant_word)
+    return (actual_relevant_precent, predicted, irrelevant_word)
