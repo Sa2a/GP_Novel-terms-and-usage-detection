@@ -163,11 +163,11 @@ def Clean_Egyptain_text(raw_text):
   raw_text=raw_text.strip()
 
   #1 remove shorten sentences that contain less than 4 words 
-  text=removeshortsen(raw_text)
+  # text=removeshortsen(raw_text)
 
   #2 remove duplichated chars in the raw text
   #text=removeduplicate(text)
-  text=reduce_characters(text)
+  text=reduce_characters(raw_text)
 
   #3 remove hashtages after remove duplicated chars
   text=removeHashtages(text)
