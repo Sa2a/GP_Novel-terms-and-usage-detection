@@ -21,7 +21,7 @@ class ArabicCorrector:
     
     p_encoding = getPositionEncoding()
     p_average = np.average(p_encoding,axis=1)
-    empty_vector  = [1]* n_char
+    empty_vector  = [0]* n_char
     def __init__(self, correct_words,init = 1) :
         self.correct_words = correct_words
         
@@ -49,7 +49,7 @@ class ArabicCorrector:
         vector = ArabicCorrector.empty_vector.copy()
         for index_word, c in enumerate(word):
             try:
-                vector[ArabicCorrector.myCharDictionary[c]-1]*=ArabicCorrector.p_average[index_word]
+                vector[ArabicCorrector.myCharDictionary[c]-1]+=ArabicCorrector.p_average[index_word]
             except:
                 pass
         return vector
