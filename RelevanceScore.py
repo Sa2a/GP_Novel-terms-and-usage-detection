@@ -27,7 +27,7 @@ def getLoss(true_sentence ,masked_sentence, return_all_pred = False):
 
     # seperate each predicted mask word in an element in the array accending order 
     # predicted_words = [tokenizer.decode(id) for id in predicted_token_id]
-    return (tokenizer.decode(predicted_token_id.argmax(axis=1)), round(outputs.loss.item(), 2), predicted_token_id if return_all_pred else None)
+    return (tokenizer.decode(predicted_token_id.argmax(axis=1)), outputs.loss.item(), predicted_token_id if return_all_pred else None)
 
 # def getTopPred(masked_sentence,topN = 100):
 #     inputs = tokenizer(masked_sentence, return_tensors="pt")
@@ -38,20 +38,21 @@ def getLoss(true_sentence ,masked_sentence, return_all_pred = False):
 #     topN_tokend_id = np.argpartition(predicted_token_id.reshape(-1), -topN)[-topN:]
 #     return tokenizer.decode(topN_tokend_id)
 
-def getTopPred(predicted_token_id, topN = 100):
-    # return the topN for each word in predicted_token_id
-    each_top = []
-    for token_ides in predicted_token_id.detach().numpy():
-        each_top.append(tokenizer.decode(np.argpartition(token_ides, -topN)[-topN:]))
-    return each_top
+# def getTopPred(predicted_token_id, topN = 100):
+#     # return the topN for each word in predicted_token_id
+#     each_top = []
+#     for token_ides in predicted_token_id:#.detach().numpy()
+#         # each_top.append(tokenizer.decode(np.argpartition(token_ides, -topN)[-topN:]))
+#         each_top.append(tokenizer.decode(token_ides.reshape(-1).sort().indices[-topN:]))
+#     return each_top
 
-def getAllPred_ides(masked_sentence):
-    inputs = tokenizer(masked_sentence, return_tensors="pt")
-    with torch.no_grad():
-        logits = model(**inputs).logits
-    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(as_tuple=True)[0]
-    predicted_token_id = logits[0, mask_token_index]    
-    return predicted_token_id
+# def getAllPred_ides(masked_sentence):
+#     inputs = tokenizer(masked_sentence, return_tensors="pt")
+#     with torch.no_grad():
+#         logits = model(**inputs).logits
+#     mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(as_tuple=True)[0]
+#     predicted_token_id = logits[0, mask_token_index]    
+#     return predicted_token_id
 
 # def getTopPred(masked_sentence,topN = 100):
 #     inputs = tokenizer(masked_sentence, return_tensors="pt")
@@ -64,13 +65,14 @@ def getAllPred_ides(masked_sentence):
 #     return top_pred # shape of (number of masks, topN)
 
 
-import random
-import re 
-def anyIn(list1 , list2):
-    for x in list1:
-        if x in list2:
-            return True
-    return False
+# import random
+# import re 
+# def anyIn(list1 , list2):
+#     for x in list1:
+#         if x in list2:
+#             return True
+#     return False
+
 
 def getRelevanceScore(true_sentence_list, word, word_index):
     # report = []
@@ -87,56 +89,30 @@ def getRelevanceScore(true_sentence_list, word, word_index):
     # get number of tokens after tokenizing the word
     n_tokens_input = len(word_tokens)
     # replace the exact word by the [MASK] tag for each token (subwords)
-    true_sentence_list_copy[i] = " ".join(["[MASK]"]*n_tokens_input)
+    true_sentence_list_copy[i] = "".join(["[MASK]"]*n_tokens_input)
     masked_sentence = " ".join(true_sentence_list_copy) #re.sub(r"\b"+word+r"\b", " ".join(["[MASK]"]*n_tokens_input), true_sentence)
     # get the top predicted word and the loss value
     (predicted, loss_actual, predicted_token_id) = getLoss(true_sentence, masked_sentence, return_all_pred= True)
 
-    
-    
-    # # true sentence with the true predicted words
-    # true_sentence2 = true_sentence
-    # masked_sentence2 = true_sentence
-    # true_sentence2 = re.sub(r"\b"+word+r"\b", pred,true_sentence2, count=1)
     n_tokens_predicted =  len(tokenizer.tokenize(predicted))
-    # masked_sentence2 = re.sub(r"\b"+pred+r"\b", "[MASK]",true_sentence2, count=1)# true_sentence2.replace(pred, " ".join(["[MASK]"]*n_tokens_irrelevant))
-
     # get the loss for the predicted word
-    true_sentence_list_copy[i] = " ".join(["[MASK]"]*n_tokens_predicted)
+    true_sentence_list_copy[i] = "".join(["[MASK]"]*n_tokens_predicted)
     masked_sentence2 = " ".join(true_sentence_list_copy)
-
     true_sentence_list_copy[i] = predicted
     sentence_pred = " ".join(true_sentence_list_copy)
-
     (predicted2, loss_relevant, non) = getLoss(sentence_pred, masked_sentence2)
-
-    # get the top 100 predicted words for each mask
-    # pred_top_100 = getTopPred(predicted_token_id)
-
-    topN = 100000
-    pred_top_100000 = getTopPred(predicted_token_id, topN)
+   
     # get random word which doesn't exists in the top 100000 
-    irrelevant_word = " ".join(pred_top_100000).split()[-1]
-    # excluded_list = list(tokenizer.vocab.keys()- (" ".join(pred_top_100000).split()+["[UNK]"," ",'',"##"]))
-    # while irrelevant_word in excluded_list or  len(tokenizer.tokenize(irrelevant_word)) >1:
-    #     irrelevant_word = random.choices(excluded_list, k=1)[0]    
-
-
-    # n_tokens_pred = len(tokenizer.tokenize(predicted))
-    # sentence_predicted_word =  re.sub(r"\b"+word+r"\b", predicted, true_sentence)
-    # (predicted, loss_relevant) = getLoss(sentence_predicted_word, masked_sentence = re.sub(r"\b"+predicted+r"\b", " ".join(["[MASK]"]*n_tokens_pred), sentence_predicted_word))
-
+    irrelevant_word = tokenizer.decode(predicted_token_id.argmin(axis=1)).replace("#",'')
     # get the loss for the irrelevant word
     n_tokens_irrelevant = len(tokenizer.tokenize(irrelevant_word))
     true_sentence_list_copy[i] = irrelevant_word
     sentence_irrelevant_word = " ".join(true_sentence_list_copy) # re.sub(r"\b"+word+r"\b", irrelevant_word, true_sentence)
-
-    true_sentence_list_copy[i] =" ".join(["[MASK]"]*n_tokens_irrelevant)
+    true_sentence_list_copy[i] ="".join(["[MASK]"]*n_tokens_irrelevant)
     masked_sentence3 =  " ".join(true_sentence_list_copy)
     (predicted3, loss_not_relevant,non) = getLoss(sentence_irrelevant_word, masked_sentence3)
-
     
-    point = 0
+    # point = 0
     # if word in " ".join(pred_top_100):
     #     point = 0.5* loss_actual
     # elif word in " ".join(pred_top_100000) or anyIn(word_tokens," ".join(pred_top_100000)):
@@ -147,8 +123,8 @@ def getRelevanceScore(true_sentence_list, word, word_index):
     #     point = -0.5* loss_actual
     
     # print(point)
-    loss_actual = loss_actual- point
-    loss_not_relevant = loss_not_relevant + point
+    # loss_actual = loss_actual- point
+    # loss_not_relevant = loss_not_relevant + point
     
     actual_relevant_dist = abs( loss_actual - loss_relevant  )
     actual_not_relevant_dist = abs( loss_actual - loss_not_relevant )
@@ -156,7 +132,7 @@ def getRelevanceScore(true_sentence_list, word, word_index):
     total_distance  = actual_relevant_dist + actual_not_relevant_dist
 
     actual_relevant_precent = actual_not_relevant_dist  / total_distance
-    actual_notrelevant_precent = actual_relevant_dist / total_distance
+    # actual_notrelevant_precent = actual_relevant_dist / total_distance
 
     # pred = 0 if actual_relevant_precent >= .2 else 1
     # report.append((pred, actual_relevant_precent, predicted, irrelevant_word))
