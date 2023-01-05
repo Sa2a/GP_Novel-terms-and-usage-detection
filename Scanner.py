@@ -1,15 +1,16 @@
 
-import sys
+import sys,os
 from RelevanceScore import *
 from Preprocessing_Detct_Novel_terms.preprocessing_detect_novel_terms2 import Clean_Egyptain_text
-sys.path.append("./Spelling  Correction/")
+current_directory = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(current_directory+"\\Spelling  Correction")
 from Misspelled_correction import *
 import pyarabic.araby as araby
 import marisa_trie
 import pandas as pd
 import numpy as np
 
-MARBert_trie = marisa_trie.Trie().load("./Data/Dictionary/MARBert_trie_dictionary.marisa")
+MARBert_trie = marisa_trie.Trie().load(current_directory+"\\Data\\Dictionary\\MARBert_trie_dictionary.marisa")
 
 
 def scan_text(text):
