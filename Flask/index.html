@@ -130,28 +130,30 @@ footer > p > a {
                 <input class="field_class" name="texta"  placeholder="ُEnter Text" autofocus>
                 
                 
-                <button class="submit_class"  form="login_form" onclick="return validarLogin()" type='submit' , value="Analyze">Analyze</button>
+                <button class="submit_class"  form="login_form" type='submit' , value="Analyze">Analyze</button>
             </div>
 
 
         </form>
         
         </div>
+        
         <div id="" class="info_div">
             <div class="wrapper">
                 <table class="table table-striped">
-    
+               {% for table in tables1 %} 
+                
                <tbody>
-      
-                {% for table in tables %}
+                
 
                 {{ table|safe }}
-                {% endfor %}
+                
                </tbody>
+             {% endfor %}
+               
              </table>
-      
-      
               </div>
+        
     </main>
 
     <footer>
