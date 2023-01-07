@@ -30,6 +30,7 @@ def applyFilter(novelTh,meaningTh):
 
 
 
+originalData_style = 0
 index_file ="index.html"
 @app.route('/')
 def homepage():
@@ -38,24 +39,54 @@ def homepage():
 def predict():
     text=request.form['texta']
     global originalData
+    global originalData_style
     originalData= scan_text(text)
-    return render_template(index_file,**locals(),   tables_original=[originalData.to_html(classes='data')], titles=originalData.columns.values)
+
+    originalData_style = originalData.style.set_table_styles([dict(selector='th', props=[('text-align', 'center')])])
+    originalData_style.set_properties(**{'text-align': 'center'}).hide_index()
+    return render_template(index_file,**locals(),   tables_original=[originalData_style.to_html(classes='data',header="true")], titles=originalData_style.columns.values)
 
 @app.route('/predict/filter', methods = ['POST','GET'])
 def filter():
     novelThreshold=np.float64(request.form['novel_threshold'])
     meaningThreshold=np.float64(request.form['meaning_threshold'])
     print(type(meaningThreshold))
+    global originalData_style
+
     data  = applyFilter(novelThreshold,meaningThreshold)
-    return render_template(index_file,**locals(),   tables_original=[originalData.to_html(classes='data')],
+    d1 = data.query('Label == "Novel"')[["Sentence","Index","Word","Relevance Score"]]
+    d2 =  data.query('Label ==  "Misspelled"')[["Sentence","Index","Word","Relevance Score"]]
+    d3 = data.query('Label == "Meaning Change"')[["Sentence","Index","Word","Relevance Score"]]
+    d4 = data.query('Label ==  "Meaning No Change"')[["Sentence","Index","Word","Relevance Score"]]
+
+    d1 = d1.style.set_table_styles([dict(selector='th', props=[('text-align', 'center')])])
+    d1.set_properties(**{'text-align': 'center'}).hide_index()
+
+    d2 = d2.style.set_table_styles([dict(selector='th', props=[('text-align', 'center')])])
+    d2.set_properties(**{'text-align': 'center'}).hide_index()
+
+    d3 = d3.style.set_table_styles([dict(selector='th', props=[('text-align', 'center')])])
+    d3.set_properties(**{'text-align': 'center'}).hide_index()
+
+    d4 = d4.style.set_table_styles([dict(selector='th', props=[('text-align', 'center')])])
+    d4.set_properties(**{'text-align': 'center'}).hide_index()
+
+    return render_template(index_file,**locals(),   tables_original=[originalData_style.to_html(classes='data',header="true")],
     tables_filter=enumerate([
-        data.query('Label == "Novel"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
-        data.query('Label ==  "Misspelled"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
-        data.query('Label == "Meaning Change"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
-        data.query('Label ==  "Meaning No Change"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
+        d1.to_html(classes='data',header="true"),
+       d2.to_html(classes='data',header="true"),
+        d3.to_html(classes='data',header="true"),
+        d4.to_html(classes='data',header="true"),
         # data[(data.Label=='Novel') or (data.Label == 'Misspelled')].to_html(classes='data'),
     ]),names =["Novel","Misspelled","Meaning Change","Meaning No Change"], titles=data.columns.values)
 
 if __name__ == "__main__":
     # host= "0.0.0.0"
-    app.run(debug=True,port=8000)
+    app.run(debug=True,port=8000,host= "0.0.0.0")
+
+
+# انت شايف كلامه ياسطا ترضاهالى.
+# دي شغلانة اخر فنيخة.
+# دشمل يابن عمي.
+# الواد دا جلدة اوي.
+# متجيش مع الواد دا عشان عقباوي وهيتعبك

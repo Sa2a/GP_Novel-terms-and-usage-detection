@@ -35,6 +35,6 @@ def scan_text(text):
                 sentenceList[i] = word
                 # if relevance_with_correction <= relevance_no_correction[0] :
                 #     sentenceList[i] = word
-                # sentence = " ".join(sentenceList)
-            report.append((sentence,i,word,relevance_no_correction[0],corrected,relevance_with_correction,relevance_no_correction[1],relevance_no_correction[2]))
-    return pd.DataFrame(report,columns =["sentence","index","word","relevance_no_correction","corrected","relevance_with_correction","predicted_word","irrelevant_word"])
+                # sentence = " ".join(sentenceList)''',relevance_no_correction[1],relevance_no_correction[2]'''''',"Most relevant","Least relevant"'''
+            report.append((sentence,i,word,relevance_no_correction[0],corrected,relevance_with_correction))
+    return pd.DataFrame(report,columns =["Sentence","Index","Word","Relevance before correction","Correct","Relevance after correction"])

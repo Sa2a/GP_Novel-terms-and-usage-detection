@@ -439,10 +439,23 @@ img,
 svg {
   vertical-align: middle;
 }
+.logoclg{
+	max-width:6%;
+  height: auto;
+	
+}
 
 table {
+  /* caption-side: bottom;
+  border-collapse: collapse; */
   caption-side: bottom;
   border-collapse: collapse;
+  text-color: black;
+  background-color: antiquewhite;
+  text-align: center;
+  padding-left: 30px;
+  width: 100%;
+	height: auto;
 }
 
 caption {

@@ -56,6 +56,8 @@
     <!-- Masthead-->
     <header class="masthead">
         <div class="container">
+            <img class="logoclg" src="{{ url_for('static', filename='assets/img/logo-en.png') }}"  alt="..." />
+		<img class="logoclg" src="{{ url_for('static', filename='assets/img/uottawa.png') }}" alt="..." />
             <div class="masthead-subheading">Welcome To Origina!</div>
             <div class="masthead-heading text-uppercase">
                 <h1>The origin of the </h1>
@@ -65,6 +67,8 @@
         </div>
     </header>
     <!-- Services-->
+     <!-- Clients-->
+     
     <section class="page-section" id="services">
         <div class="container">
             <div class="text-center">
@@ -158,6 +162,21 @@
         </div>
     </section>
     <!-- Team-->
+    <div class="py-5">
+        <div class="container" style="align-content: center;">
+            <h1>Sponsors</h1>
+            <div class="row align-items-center">
+                <div class="col-md-3 col-sm-6 my-3">
+                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
+                            src="{{ url_for('static', filename='assets/img/logos/microsoft.svg') }}" alt="..."
+                            aria-label="Microsoft Logo" /></a>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
     <section class="page-section bg-light bgm" id="tryit">
         <div class="container ">
             <div class="text-center ">
@@ -178,9 +197,11 @@
             <div id="" class="info_div">
                 {% for table in tables_original %}
                 <h1 style="color: black;">General Report</h1>
-                <div class="wrapper">
-                    <table class="table table-striped">
-                        <tbody style="color: black;">
+                <div class="wrapper" >
+                         <table class="table table-striped">
+                        <tbody>
+                            <style  style= "float:text-center">
+                            </style>
                             {{ table|safe }}
                         </tbody>
                     </table>
@@ -194,7 +215,7 @@
                     
                     <input type="range" min="0" max="1" value=.5 class="slider" name="novel_threshold" id="myRange"
                         step="0.01"><br>
-                    <p class="valueprop" style="color: black;">Novel terms threshold <= <span id="demo"></span></p><br>
+                    <p class="valueprop2" style="color: black;">Novel terms threshold <= <span id="demo"></span></p><br>
                     <input type="range" min="0" max="1" value=.5 class="slider" id="myRange2" name="meaning_threshold"
                         step="0.01"><br>
                     <p class="valueprop2" style="color: black;">New meaning threshold <= <span id="demo2"></span></p><br>
@@ -239,21 +260,7 @@
 
 
     </section>
-    <!-- Clients-->
-    <div class="py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
-                            src="{{ url_for('static', filename='assets/img/logos/microsoft.svg') }}" alt="..."
-                            aria-label="Microsoft Logo" /></a>
-                </div>
-
-
-
-            </div>
-        </div>
-    </div>
+   
     <!-- Contact-->
     <section class="page-section" id="contact">
         <div class="container">
