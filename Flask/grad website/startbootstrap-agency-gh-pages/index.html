@@ -161,7 +161,7 @@
     <section class="page-section bg-light bgm" id="tryit">
         <div class="container ">
             <div class="text-center ">
-                <h2 class="section-heading text-uppercase">PLEASE ENTEr a text</h2>
+                <h2 class="section-heading text-uppercase" style="color: white;">Enter Egyptian Text</h2>
                 <form id="login_form" class="form_class" action="/predict" method="POST">
                     <div class="form_div">
 
@@ -170,49 +170,44 @@
 
                     </div>
                     <br> <br>
-                    <button class="submit_class" form="login_form" onclick="return validarLogin()" type="submit" ,
-                        value="Analyze">Analyze</button>
+                    <button class="submit_class" form="login_form" type="submit" , value="Analyze">Analyze</button>
                 </form>
 
             </div>
 
             <div id="" class="info_div">
+                {% for table in tables_original %}
+                <h1 style="color: black;">General Report</h1>
                 <div class="wrapper">
-                    {% for table in tables_original %}<table class="table table-striped">
-
-
-                        <tbody>
+                    <table class="table table-striped">
+                        <tbody style="color: black;">
                             {{ table|safe }}
                         </tbody>
-
-
                     </table>
-                    {% endfor %}
+                    
                 </div>
+                {% endfor %}
             </div>
             <form id="filter_form" class="form_class" action="/predict/filter" method="POST">
 
                 <div class="slidecontainer">
-
+                    
                     <input type="range" min="0" max="1" value=.5 class="slider" name="novel_threshold" id="myRange"
-                        step="0.01">
-                    <p class="valueprop">Novel terms threshold <= <span id="demo"></span></p>
+                        step="0.01"><br>
+                    <p class="valueprop" style="color: black;">Novel terms threshold <= <span id="demo"></span></p><br>
                     <input type="range" min="0" max="1" value=.5 class="slider" id="myRange2" name="meaning_threshold"
-                        step="0.01">
-                    <p class="valueprop2">New meaning threshold <= <span id="demo2"></span></p>
-                    <button class="submit_class" form="filter_form" type="submit" value="Analyze">Apply
-                        Filter</button>
+                        step="0.01"><br>
+                    <p class="valueprop2" style="color: black;">New meaning threshold <= <span id="demo2"></span></p><br>
+                    <button class="submit_class" form="filter_form" type="submit" value="Analyze">Apply Filter</button>
                 </div>
             </form>
             <div id="2" class="info_div">
-                {% for table in tables_filter %}
+                {% for i,table in tables_filter %}
+                <h1 style="color: black;">{{ names[i] }}</h1>
                 <div class="wrapper">
                     <table class="table table-striped">
 
                         <tbody>
-
-
-
                             {{ table|safe }}
 
                         </tbody>
@@ -220,7 +215,6 @@
 
                 </div>
                 {% endfor %}
-
             </div>
 
             <script>

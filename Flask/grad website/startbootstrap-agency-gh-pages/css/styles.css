@@ -11869,6 +11869,17 @@ header.masthead .masthead-heading {
 .img-brand {
   height: 2.75rem;
 }
+section#tryit {
+  padding-top: 10.5rem;
+  padding-bottom: 6rem;
+  text-align: center;
+  color: #000;
+  background-image: url("../assets/img/header-bg.jpg");
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+}
 
 section#contact {
   background-color: #212529;

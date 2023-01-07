@@ -15,11 +15,13 @@ originalData = []
 def applyFilter(novelTh,meaningTh):
     global originalData
     data  = originalData.copy()
+    # data.apply(lambda x: max(x.relevance_no_correction,x.relevance_with_correction), axis=1 )
+    data["Relevance Score"] = data.apply(lambda row: max(row["Relevance before correction"],row["Relevance after correction"]),axis=1)
     conditions = [
         (data['Correct'] == True) & (data["Relevance before correction"] <= meaningTh),
         (data['Correct'] == True) & (data["Relevance before correction"] > meaningTh),
-        (data['Correct'] != True) & (data[["Relevance before correction","Relevance after correction"]].max(axis=1) <= novelTh),
-        (data['Correct'] != True) & (data[["Relevance before correction","Relevance after correction"]].max(axis=1) > novelTh)
+        (data['Correct'] != True) & (data["Relevance Score"] <= novelTh),
+        (data['Correct'] != True) & (data["Relevance Score"]> novelTh)
         ]
     values = ['Meaning Change', 'Meaning No Change', 'Novel', 'Misspelled']
     # create a new column and use np.select to assign values to it using our lists as arguments
@@ -45,14 +47,15 @@ def filter():
     meaningThreshold=np.float64(request.form['meaning_threshold'])
     print(type(meaningThreshold))
     data  = applyFilter(novelThreshold,meaningThreshold)
-    return render_template(index_file,**locals(),   
-    tables_filter=[
-        data.query('Label ==  "Meaning No Change"').to_html(classes='data'),
-        data.query('Label == "Meaning Change"').to_html(classes='data'),
-        data.query('Label == "Novel"').to_html(classes='data'),
-        data.query('Label ==  "Misspelled"').to_html(classes='data')
+    return render_template(index_file,**locals(),   tables_original=[originalData.to_html(classes='data')],
+    tables_filter=enumerate([
+        data.query('Label == "Novel"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
+        data.query('Label ==  "Misspelled"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
+        data.query('Label == "Meaning Change"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
+        data.query('Label ==  "Meaning No Change"')[["Sentence","Index","Word","Relevance Score"]].to_html(classes='data'),
         # data[(data.Label=='Novel') or (data.Label == 'Misspelled')].to_html(classes='data'),
-    ],names =["Meaning No Change","Meaning Change","Novel","Misspelled"], titles=data.columns.values)
+    ]),names =["Novel","Misspelled","Meaning Change","Meaning No Change"], titles=data.columns.values)
 
 if __name__ == "__main__":
-    app.run(debug=True,port=8000, host= "0.0.0.0")
+    # host= "0.0.0.0"
+    app.run(debug=True,port=8000)
